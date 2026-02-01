@@ -1,7 +1,7 @@
 {
   "name": "cracked",
   "productName": "Cracked",
-  "version": "0.2.21",
+  "version": "0.2.22",
   "main": "main.js",
   "description": "Web audio, cracked.",
   "keywords": [
@@ -17,7 +17,7 @@
   "dependencies": {
     "electron-json-storage": "1.1.0",
     "midi-writer-js": "^2.1.4",
-    "monode": "2.2.3"
+    "monode": "^3.0.1"
   },
   "devDependencies": {
     "electron-packager": "^15.2.0",
