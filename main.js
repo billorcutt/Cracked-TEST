@@ -1,15 +1,21 @@
 'use strict';
 
+require('@electron/remote/main').initialize();
 const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const storage = require('electron-json-storage');
 var Menu = electron.Menu;
-var menu = new Menu();
 var dialog = electron.dialog;
 var fs = require('fs');
 var shell = electron.shell;
-var monode = require('monode')();
+var monode;
+try {
+    monode = require('monode')();
+} catch (err) {
+    console.warn('Monode (Monome hardware support) failed to load:', err.message);
+    monode = { on: function() {} };
+}
 var draggedFilePath = []; //path of any file that was dragged onto the app icon
 var openFileAlias;
 global.monome_device = null;
@@ -67,6 +73,10 @@ monode.on('device', function(device) {
 monode.on('disconnect', function(device){
     global.monome_device = null;
     console.log('A device was disconnected:', device);
+});
+
+monode.on('error', function(err) {
+    console.warn('Monode (Monome hardware support) failed to initialize:', err.message);
 });
 
 app.on("open-file", function(event, path) {
@@ -179,7 +189,7 @@ app.on('ready', function() {
     //it opens a window
     function openCrackedWindow() {
 
-        var options = {width: 800, height: 600, webPreferences:{webSecurity:false, nodeIntegration: true, enableRemoteModule: true, contextIsolation:false, nativeWindowOpen:false}};
+        var options = {width: 800, height: 600, webPreferences:{webSecurity:false, nodeIntegration: true, contextIsolation: false, nativeWindowOpen: false}};
 
         //offset from current window
         if(mainWindow) {
@@ -189,6 +199,7 @@ app.on('ready', function() {
 
         // Create the browser window.
         var win = new BrowserWindow(options);
+        require('@electron/remote/main').enable(win.webContents);
 
         //get the current theme
         storage.get("theme",function(error,data){

@@ -1,0 +1,19 @@
+diff --git a/node_modules/monode/out/lib/monome.js b/node_modules/monode/out/lib/monome.js
+index 5150bfb..be119eb 100644
+--- a/node_modules/monode/out/lib/monome.js
++++ b/node_modules/monode/out/lib/monome.js
+@@ -31,10 +31,12 @@ Licensed under the MIT license.
+     osc.Server(PORT, function(error, _listen) {
+       listen = _listen;
+       if (error) {
+-        throw new Error('Failed to open main server: ' + error);
++        monome.emit('error', new Error('Failed to open main server: ' + error));
++        return;
+       }
+       if (listen.port !== PORT) {
+-        throw new Error('Failed to listen on udp port ' + PORT + '. Is node-monome already running?');
++        monome.emit('error', new Error('Failed to listen on udp port ' + PORT + '. Is node-monome already running?'));
++        return;
+       }
+       listen.on('message', function(msg, info) {
+         var device, id, port, type;
