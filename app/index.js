@@ -3,28 +3,28 @@
 
 var fs = require('fs');
 var path = path || require('path');
-var electron = require('electron');
+var remote = require('@electron/remote');
 const MidiWriter = require('midi-writer-js');
-var flipShutdownFlag = electron.remote.getGlobal("flipShutdownFlag");
-var app = electron.remote.app;
-var dialog = electron.remote.dialog;
+var flipShutdownFlag = remote.getGlobal("flipShutdownFlag");
+var app = remote.app;
+var dialog = remote.dialog;
 var crackedFile = null;
 var fontSize = 14;
-const currentWindow = electron.remote.getCurrentWindow();
+const currentWindow = remote.getCurrentWindow();
 var trackArr = []
 
 //shared object
-var _shared_object = electron.remote.getGlobal("shared_object");
+var _shared_object = remote.getGlobal("shared_object");
 
 //window id
-var _windowId = electron.remote.getGlobal("window_id");
+var _windowId = remote.getGlobal("window_id");
 
 //monome section
-var monome_device = electron.remote.getGlobal("monome_device") || null;
+var monome_device = remote.getGlobal("monome_device") || null;
 var _monome_press_callback = null;
 
 function _monome_init() {
-    monome_device = electron.remote.getGlobal("monome_device");
+    monome_device = remote.getGlobal("monome_device");
 }
 
 function _monome_led_on(x,y) {
@@ -242,9 +242,9 @@ function saveFile(callback) {
     //if not previously saved
     if(!crackedFile) {
         //throw up a dialog
-        __cb(dialog.showSaveDialogSync(
-            {title:"Do you want to save the changes made to the document \"Untitled\"?"},function(path){}
-        ));
+        __cb(dialog.showSaveDialogSync(currentWindow, {
+            title: "Do you want to save the changes made to the document \"Untitled\"?"
+        }));
     } else {
         //already saved so just save it.
         __cb();
