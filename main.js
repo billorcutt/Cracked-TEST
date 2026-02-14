@@ -6,7 +6,6 @@ const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const storage = require('electron-json-storage');
 var Menu = electron.Menu;
-var menu = new Menu();
 var dialog = electron.dialog;
 var fs = require('fs');
 var shell = electron.shell;
